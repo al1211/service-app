@@ -1,28 +1,24 @@
-# OS files
-.DS_Store
-Thumbs.db
+# Node dependencies
+node_modules/
 
 # Logs
 *.log
 
-# Environment variables
+# Environment files
 .env
 .env.*
 
-# Dependency directories
-node_modules/
-vendor/
-
-# Build outputs
-dist/
+# Build folders
 build/
-out/
+dist/
 
-# IDE/editor files
+# React Native
+android/app/build/
+ios/build/
+
+# macOS
+.DS_Store
+
+# IDE
 .vscode/
 .idea/
-*.swp
-
-# Temporary files
-*.tmp
-*.cache
