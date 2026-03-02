@@ -17,6 +17,9 @@ const userSchema = new Schema({
     fullAddress: String
   }]
 }, { timestamps: true })
+
+
+
 Driver Model
 js// drivers/driver.model.js
 const driverSchema = new Schema({
