@@ -12,3 +12,9 @@ router.post("/refresh",      validate(refreshTokenSchema), authController.refres
 router.post("/logout",       protect,                      authController.logout);
 
 export default router;
+
+
+
+
+//  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YTU3ZDI4NmU4NjVmMGFhMDUyZjVjYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzcyNDUzMjMyLCJleHAiOjE3NzI0NTQxMzJ9.ZJcYgfnfkFFC8Y2Tf_1crTHIOpJARQoMp-pNQBU04PM",
+//     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YTU3ZDI4NmU4NjVmMGFhMDUyZjVjYiIsImlhdCI6MTc3MjQ1MzIzMiwiZXhwIjoxNzczMDU4MDMyfQ.uEsipkbvrl5gGkAh-JpSpAVNbnuP0jSecf8OousJIko",
