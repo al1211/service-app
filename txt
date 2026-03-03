@@ -2,6 +2,7 @@ my-service-app/
 │
 ├── mobile-app/                    # React Native (Customer + Driver App)
 │   ├── src/
+|   |   
 │   │   ├── api/                   # API calls & axios config
 │   │   │   ├── axiosInstance.js
 │   │   │   ├── authApi.js
