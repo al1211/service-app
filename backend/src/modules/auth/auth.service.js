@@ -2,6 +2,7 @@ import User from "../user/user.model.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { ENV } from "../../config/env.js";
+import mongoose from "mongoose";
 
 
 // expire will be 15 minute
@@ -51,6 +52,49 @@ export const register = async ({ name, email, phone }) => {
   await generateAndSaveOtp(phone);
 };
 
+
+export const requestOtp = async (phone) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try{
+
+  let user = await User.findOne({ phone });
+  if (user) throw { status: 409, message: "Phone number already registered" };
+    // Here, you may create a temporary record, or just generate OTP in a separate OTP table
+  const otp = crypto.randomInt(100000, 999999).toString();
+
+  const otoExpiry=new Date(Date.now() + 1 * 60 * 1000); ; // valid 1 min only
+  // Save OTP & expiry to DB or Redis
+
+  if(!user){
+    user = await User.create({
+      phone,
+      otp,
+      otoExpiry
+    });
+
+
+  }else{
+    user.otp=otp;
+    user.otpExpiry=otoExpiry;
+    await user.save();
+  }
+    console.log(`OTP for ${phone}: ${otp}`);
+
+    await session.commitTransaction();
+    session.endSession();
+  
+
+  return { success: true, message: "OTP sent" };
+
+  }catch(err){
+    await session.abortTransaction();
+    session.endSession();
+    throw err;
+  }
+};
+
+
 export const sendOtp = async ({ phone }) => {
   const user = await User.findOne({ phone });
   if (!user) throw { status: 404, message: "User not found. Please register first." };
@@ -61,7 +105,7 @@ export const sendOtp = async ({ phone }) => {
 
 export const verifyOtp = async ({ phone, otp }) => {
   const user = await User.findOne({ phone });
-  console.log(phone,otp);
+  
   if (!user) throw { status: 404, message: "User not found" };
   if (user.otp !== otp) throw { status: 400, message: "Invalid OTP" };
   if (user.otpExpiry < new Date()) throw { status: 400, message: "OTP expired" };
