@@ -1,37 +1,129 @@
 const colors = {
-  // 🔵 Primary Brand
-  primary: "#2563EB",        // Strong Blue (trust + tech)
-  primaryLight: "#3B82F6",
-  primaryDark: "#1E40AF",
 
-  // 🟢 Success (Order completed, Online driver)
-  success: "#16A34A",
-  successLight: "#22C55E",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🔵 Primary Brand — Deep Indigo
+  // Feels premium, modern, trustworthy
+  // Used: Buttons, active states, links, icons
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  primary:       "#1D4ED8",   // Deep Royal Blue
+  primaryLight:  "#3B82F6",   // Bright Blue (hover / highlights)
+  primaryDark:   "#1E3A8A",   // Navy (pressed states)
+  primarySoft:   "#EFF6FF",   // Ghost tint (chip bg, tag bg)
 
-  // 🔴 Error (Cancelled, Failed payment)
-  danger: "#DC2626",
-  dangerLight: "#EF4444",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🟢 Success — Emerald
+  // Used: Trip completed, payment success, online badge
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  success:       "#059669",   // Emerald (richer than green)
+  successLight:  "#34D399",   // Mint highlight
+  successSoft:   "#ECFDF5",   // Tint background
 
-  // 🟡 Warning (Pending order, attention)
-  warning: "#F59E0B",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🔴 Danger — Warm Red
+  // Used: Cancelled, failed, alert, delete
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  danger:        "#DC2626",
+  dangerLight:   "#FCA5A5",
+  dangerSoft:    "#FEF2F2",   // Tint background
 
-  // 🟣 Driver Mode Accent (optional differentiation)
-  driverAccent: "#7C3AED",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🟡 Warning — Amber
+  // Used: Pending, ETA delay, low battery driver
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  warning:       "#D97706",   // Deeper amber (more readable)
+  warningLight:  "#FCD34D",
+  warningSoft:   "#FFFBEB",
 
-  // ⚫ Neutral
-  background: "#F8FAFC",
-  card: "#FFFFFF",
-  border: "#E2E8F0",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🟣 Driver Mode — Violet
+  // Used: Driver dashboard, driver-specific UI elements
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  driver:        "#6D28D9",   // Deep Violet
+  driverLight:   "#A78BFA",
+  driverSoft:    "#F5F3FF",
 
-  // 🖋 Text
-  textPrimary: "#0F172A",
-  textSecondary: "#64748B",
-  textLight: "#94A3B8",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🟠 Accent — Warm Amber/Orange
+  // NEW: Used for price, promo banners, CTA highlights
+  // Gives energy — makes pricing & offers pop
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  accent:        "#F97316",   // Vibrant Orange
+  accentLight:   "#FDBA74",
+  accentSoft:    "#FFF7ED",
 
-  // 🌙 Dark Mode (optional future support)
-  darkBackground: "#0F172A",
-  darkCard: "#1E293B",
-  darkText: "#F1F5F9",
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // ⚫ Neutrals — Cool Slate
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  background:    "#F8FAFC",   // App background (keep yours)
+  surface:       "#FFFFFF",   // Cards, sheets, modals
+  surfaceAlt:    "#F1F5F9",   // Input bg, inactive tab bg
+  border:        "#E2E8F0",   // Dividers, input borders
+  borderFocus:   "#93C5FD",   // Input focused border
+  overlay:       "rgba(15, 23, 42, 0.45)", // Modal backdrop
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🖋 Typography
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  textPrimary:   "#0F172A",   // Headings, bold labels
+  textSecondary: "#475569",   // Body, descriptions (slightly darker than yours)
+  textLight:     "#94A3B8",   // Placeholders, hints, timestamps
+  textDisabled:  "#CBD5E1",   // Disabled inputs, inactive labels
+  textInverse:   "#FFFFFF",   // Text on dark/colored buttons
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🗺️ Map UI (important for ride apps!)
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  mapPickup:     "#1D4ED8",   // Blue pin = pickup
+  mapDrop:       "#059669",   // Green pin = destination
+  mapRoute:      "#3B82F6",   // Route line color
+  mapDriver:     "#F97316",   // Driver car marker
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // 🌙 Dark Mode
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  darkBackground: "#0B1120",  // Deeper than yours (more premium)
+  darkSurface:    "#1E293B",
+  darkCard:       "#1E293B",
+  darkBorder:     "#334155",
+  darkText:       "#F1F5F9",
+  darkTextSub:    "#94A3B8",
 };
 
 export default colors;
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// USAGE GUIDE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//
+//  BUTTONS
+//    Primary CTA       → bg: primary,       text: textInverse
+//    Secondary CTA     → bg: primarySoft,   text: primary
+//    Danger action     → bg: danger,        text: textInverse
+//    Ghost/outline     → border: border,    text: textPrimary
+//
+//  STATUS BADGES
+//    Completed         → bg: successSoft,   text: success
+//    Pending           → bg: warningSoft,   text: warning
+//    Cancelled         → bg: dangerSoft,    text: danger
+//    Active/Live       → bg: primarySoft,   text: primary
+//
+//  INPUTS
+//    Default border    → border
+//    Focused border    → borderFocus
+//    Background        → surfaceAlt
+//    Placeholder       → textLight
+//
+//  CARDS
+//    Background        → surface (#FFFFFF)
+//    Shadow            → rgba(0,0,0,0.06)
+//
+//  PRICE / OFFERS
+//    Highlight price   → accent (#F97316)
+//    Discount badge    → bg: accentSoft, text: accent
+//
+//  DRIVER MODE
+//    All driver UI     → driver (#6D28D9) replaces primary
+//    Online badge      → success
+//    Offline badge     → textLight
+//
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

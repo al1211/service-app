@@ -5,8 +5,8 @@ import * as authService from "./auth.service.js";
 
 
 
-// POST /auth/register
-export const register = handle(async (req,res) => {
+// POST /auth/request-otp
+export const requestOtp = handle(async (req,res) => {
   const {phone}=req.body;
   console.log(phone)
   await authService.requestOtp(phone);

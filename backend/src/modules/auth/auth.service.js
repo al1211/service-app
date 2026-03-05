@@ -61,7 +61,7 @@ export const requestOtp = async (phone) => {
   let user = await User.findOne({ phone });
   if (user) throw { status: 409, message: "Phone number already registered" };
     // Here, you may create a temporary record, or just generate OTP in a separate OTP table
-  const otp = crypto.randomInt(100000, 999999).toString();
+  const otp = crypto.randomInt(1000, 9999).toString();
 
   const otoExpiry=new Date(Date.now() + 1 * 60 * 1000); ; // valid 1 min only
   // Save OTP & expiry to DB or Redis
