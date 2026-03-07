@@ -22,9 +22,9 @@ export const sendOtp = async (phone) => {
   );
 
   // TODO: Send OTP via SMS (Twilio / MSG91 / Fast2SMS)
-  console.log(`OTP for ${phone}: ${otp}`);
+  // console.log(`OTP for ${phone}: ${otp}`);
 
-  return { success: true };
+  return { success: true,phone,otp };
 };
 
 // ─────────────────────────────────────────

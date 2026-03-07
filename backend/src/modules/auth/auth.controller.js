@@ -5,8 +5,9 @@ import * as authService from "./auth.service.js";
 // POST /auth/request-otp
 export const requestOtp = handle(async (req, res) => {
   const { phone } = req.body;
-  await authService.sendOtp(phone);
-  return { message: `OTP sent successfully to ${phone}` };
+ const allthing= await authService.sendOtp(phone);
+//  console.log("allthing",allthing);
+  return { message: `OTP sent successfully to ${phone} to ${allthing.otp}` };
 });
 
 // POST /auth/register

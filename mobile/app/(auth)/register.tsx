@@ -8,24 +8,39 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import colors from '../../src/theme/colors';
 import { Ionicons } from '@expo/vector-icons';
+import { requestOtp } from '@/src/api/authApi';
 
 export default function Register() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
   const isValid = phone.replace(/\D/g, '').length >= 10;
 
-  const handleSendOtp = () => {
-    if (!isValid) return;
+  const handleSendOtp = async () => {
+    if (!isValid || loading) return;
+    setLoading(true);
+    try {
+
+    const data =   await requestOtp({ phone });
+      router.push('/(auth)/otp');
+      console.log(data);
+
+    } catch (error) {
+      Alert.alert(`Error ${error} "Failed to send OTP. Please try again`)
+    } finally {
+      setLoading(false);
+    }
     // TODO: API call to send OTP
-    router.push('/(auth)/otp');
   };
 
   return (
@@ -107,22 +122,18 @@ export default function Register() {
           style={[styles.sendBtn, isValid ? styles.sendBtnOn : styles.sendBtnOff]}
           onPress={handleSendOtp}
           activeOpacity={0.85}
-          disabled={!isValid}
+          disabled={loading}
         >
-          <Ionicons
+          { !loading ? (<Ionicons
             name="send-outline"
             size={18}
-            color={isValid ? colors.textInverse : colors.textLight}
+            color={!loading ? colors.textInverse : colors.textLight}
             style={{ marginRight: 8 }}
-          />
-          <Text style={[styles.sendBtnText, !isValid && { color: colors.textLight }]}>
-            Send OTP
+          />) : null}
+          <Text style={[styles.sendBtnText, loading && { color: colors.textLight }]}>
+           {!loading ? "Send OTP":<ActivityIndicator size={'large'} color="white"/>}
           </Text>
-          {isValid && (
-            <View style={styles.arrowPill}>
-              <Text style={styles.arrowText}>→</Text>
-            </View>
-          )}
+         
         </TouchableOpacity>
 
         <Text style={styles.footerNote}>

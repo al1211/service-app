@@ -102,7 +102,7 @@ export default function WelcomeScreen() {
         >
           <Text style={styles.primaryBtnText}>Get Started</Text>
           <View style={styles.arrowPill}>
-            <Ionicons name="arrow-forward" size={16} color={colors.primary} />
+            <Ionicons name="arrow-forward" size={16} color={colors.accentSoft} />
           </View>
         </TouchableOpacity>
 
@@ -119,7 +119,7 @@ export default function WelcomeScreen() {
         {/* Login link */}
         <View style={styles.loginRow}>
           <Text style={styles.loginLabel}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => router.push("/(auth)/login")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(auth)/register")} activeOpacity={0.7}>
             <Text style={styles.loginLink}>Log In</Text>
           </TouchableOpacity>
         </View>
