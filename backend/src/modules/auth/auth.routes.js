@@ -5,9 +5,9 @@ import { protect } from "../../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/request-otp",     validate(sendOtpSchema),     authController.requestOtp);
-router.post("/resend-otp",     validate(sendOtpSchema),      authController.sendOtp);
-router.post("/verify-otp",   validate(verifyOtpSchema),    authController.verifyOtp);
+router.post("/request-otp",     validate(sendOtpSchema), authController.requestOtp);
+router.post("/register",     validate(registerSchema),  authController.regitster);
+router.post("/verify-otp",   validate(verifyOtpSchema), authController.verifyOtp);
 router.post("/refresh",      validate(refreshTokenSchema), authController.refreshToken);
 router.post("/logout",       protect,                      authController.logout);
 

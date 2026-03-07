@@ -19,8 +19,9 @@ export const registerSchema = Joi.object({
     "string.min": "Name must be at least 2 characters",
     "any.required": "Name is required",
   }),
-  phone,
   email: Joi.string().email().lowercase().optional(),
+  phone,
+  
 });
 
 export const sendOtpSchema = Joi.object({ phone });

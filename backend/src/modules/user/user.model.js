@@ -3,9 +3,9 @@ const {Schema}=mongoose;
 
 const userSchema = new Schema({
   name: { type: String, trim: true },
-  email: { type: String, unique: true, lowercase: true },
+  email: { type: String, unique: true, lowercase: true,sparse:true,trim:true },
   phone: { type: String, unique: true, required: true },
-  passwordHash: { type: String },          // bcrypt hashed
+ 
   role: { type: String, enum: ['user', 'driver', 'admin'], default: 'user' },
   avatar: { type: String },
   isVerified: { type: Boolean, default: false },

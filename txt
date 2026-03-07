@@ -233,3 +233,154 @@ Real-time: Socket.io for live tracking
 Maps: Google Maps API (mobile) + MapBox (admin)
 Payments: Razorpay (India) or Stripe
 Push notifications: Firebase FCM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ============================================================
+// 1. SCHEMA  —  user.model.js
+// ============================================================
+import { Schema, model } from 'mongoose';
+
+const userSchema = new Schema({
+  name:          { type: String, trim: true },
+  email:         { type: String, unique: true, sparse: true, lowercase: true }, // sparse = allows multiple nulls
+  phone:         { type: String, unique: true, required: true },
+  passwordHash:  { type: String },
+  role:          { type: String, enum: ['user', 'driver', 'admin'], default: 'user' },
+  avatar:        { type: String },
+  isVerified:    { type: Boolean, default: false },
+  isActive:      { type: Boolean, default: true },
+  refreshToken:  { type: String },
+  otp:           { type: String },
+  otpExpiry:     { type: Date },
+  address: [{
+    label:       String,
+    coordinates: { lat: Number, lng: Number },
+    fullAddress: String,
+  }],
+}, { timestamps: true });
+
+export const User = model('User', userSchema);
+
+
+// ============================================================
+// 2. VALIDATION SCHEMA  —  auth.schema.js
+// ============================================================
+import Joi from 'joi';
+
+export const registerSchema = Joi.object({
+  name: Joi.string().trim().min(2).max(50).required().messages({
+    'string.min':     'Name must be at least 2 characters',
+    'string.max':     'Name must be at most 50 characters',
+    'any.required':   'Name is required',
+  }),
+  email: Joi.string().email().lowercase().optional().messages({
+    'string.email': 'Enter a valid email address',
+  }),
+  password: Joi.string().min(8).required().messages({
+    'string.min':   'Password must be at least 8 characters',
+    'any.required': 'Password is required',
+  }),
+  // phone comes from the OTP-verified session/token — NOT from body
+});
+
+
+// ============================================================
+// 3. SERVICE  —  auth.service.js
+// ============================================================
+import bcrypt from 'bcrypt';
+import { User } from '../models/user.model.js';
+
+export const register = async ({ name, email, password, phone }) => {
+  // phone must come from the verified OTP session (passed by controller)
+  const user = await User.findOne({ phone });
+
+  // Guard: user must exist AND be OTP-verified before completing profile
+  if (!user)            throw { status: 404, message: 'Phone number not found. Please start registration again.' };
+  if (!user.isVerified) throw { status: 403, message: 'Phone not verified. Please complete OTP verification first.' };
+
+  // Guard: profile already completed (has a name = already registered)
+  if (user.name)        throw { status: 409, message: 'Profile already completed. Please log in.' };
+
+  // Fill in profile fields
+  user.name = name;
+  if (email)    user.email         = email.toLowerCase();
+  if (password) user.passwordHash  = await bcrypt.hash(password, 10);
+
+  // Clear OTP after use (security hygiene)
+  user.otp       = undefined;
+  user.otpExpiry = undefined;
+
+  await user.save(); // ✅ was: User.save() — must call on the instance
+
+  // Strip sensitive fields before returning
+  const { passwordHash, otp, otpExpiry, refreshToken, ...safeUser } = user.toObject();
+
+  return { success: true, message: 'Profile completed successfully', user: safeUser };
+};
+
+
+// ============================================================
+// 4. CONTROLLER  —  auth.controller.js
+// ============================================================
+import { handle } from '../utils/handle.js'; // your async wrapper
+import * as authService from '../services/auth.service.js';
+
+export const register = handle(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  // ✅ phone must come from the verified OTP token/session — not body
+  // Assumes your OTP verify step sets req.verifiedPhone via middleware
+  const phone = req.verifiedPhone;
+  if (!phone) {
+    return res.status(401).json({ message: 'OTP verification required before registration.' });
+  }
+
+  const result = await authService.register({ name, email, password, phone });
+
+  return res.status(201).json(result);
+});
+
+
+// ============================================================
+// 5. ROUTE  —  auth.route.js
+// ============================================================
+import { Router } from 'express';
+import { validate }          from '../middleware/validate.js';
+import { requireOtpVerified } from '../middleware/requireOtpVerified.js'; // protects this route
+import { registerSchema }    from '../validators/auth.schema.js';
+import * as authController   from '../controllers/auth.controller.js';
+
+const router = Router();
+
+// POST /api/auth/register
+// Flow: sendOtp → verifyOtp (sets req.verifiedPhone) → register
+router.post(
+  '/register',
+  requireOtpVerified,         // ✅ ensures phone is verified before allowing profile setup
+  validate(registerSchema),   // ✅ validates name, email, password
+  authController.register,    // ✅ fixed typo: was "regitster"
+);
+
+export default router;
